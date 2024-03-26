@@ -8,7 +8,7 @@ GO
 CREATE TYPE Bank_account_number FROM VARCHAR(26);
 CREATE TYPE Phone_number FROM VARCHAR(15); --15 bo w wielu krajach moze byc inna liczba znakow, jednak max=15
 CREATE TYPE Post_code FROM VARCHAR(8);
-CREATE TYPE Open_hours FROM VARCHAR(11) -- HH:MM-HH-MM
+CREATE TYPE Open_hours FROM VARCHAR(11); -- HH:MM-HH:MM
 
 use LibraryPW;
 GO
@@ -17,7 +17,7 @@ CREATE TABLE Authors(
 Author_ID int primary key IDENTITY (1,1),
 Surename varchar(50) NOT NULL,
 Name varchar(50) NOT NULL,
-Biography varchar(255),
+Biography ntext,
 );
 
 CREATE TABLE Publishing_houses(
@@ -32,7 +32,7 @@ Name varchar(50),
 
 CREATE TABLE Reviews(
 Review_ID int primary key IDENTITY (1,1),
-Mark int NOT NULL,
+Mark int NOT NULL CHECK (Mark BETWEEN 1 AND 5),
 Review varchar(255),
 Hide int,
 );
@@ -135,7 +135,7 @@ foreign key (Library_ID) references Libraries(Library_ID)
 CREATE TABLE Users(
 User_ID int primary key IDENTITY (1,1),
 Name varchar(50) NOT NULL,
-Email varchar(50) NOT NULL,
+Email varchar(256) NOT NULL,
 Phone_number Phone_number,
 Status varchar(20),
 Rent_ID int,
@@ -230,4 +230,4 @@ Rents on Users.User_ID=Rents.User_ID
 Left join
 Elementary_books on Rents.Elementary_book_ID=Elementary_books.Elementary_book_ID
 Left join
-Books on Elementary_books.Book_ID=Books.Title
+Books on Elementary_books.Book_ID=Books.Book_ID
